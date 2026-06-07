@@ -1,0 +1,9 @@
+{{- $profile := promptStringOnce . "profile" "Profile (personal/work)" -}}
+{{- $workRepoURL := "" -}}
+{{- if eq $profile "work" -}}
+{{-   $workRepoURL = promptStringOnce . "workRepoURL" "Work dotfiles repo URL (git)" -}}
+{{- end -}}
+
+[data]
+  profile = {{ $profile | quote }}
+  workRepoURL = {{ $workRepoURL | quote }}

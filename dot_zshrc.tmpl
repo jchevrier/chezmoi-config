@@ -1,0 +1,87 @@
+# Path to your oh-my-zsh installation.
+export ZSH=~/.oh-my-zsh
+
+### Configure Powerlevel9k theme
+POWERLEVEL9K_MODE="nerdfont-complete"
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=''
+POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX='%K{240}%F{white} \uF017 %D{%H:%M:%S}  %f%k%F{240}\UE0B0%f '
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='%K{240}%F{white} \uF017 %D{%H:%M:%S}  %f%k%F{240}\UE0B0%f '
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon context dir_writable dir vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs virtualenv history command_execution_time)
+
+POWERLEVEL9K_STATUS_OK_BACKGROUND="238"
+POWERLEVEL9K_STATUS_ERROR_BACKGROUND="238"
+POWERLEVEL9K_STATUS_ERROR_FOREGROUND="red"
+POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_BACKGROUND="blue"
+POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND="white"
+POWERLEVEL9K_OS_ICON_BACKGROUND="016"
+POWERLEVEL9K_CONTEXT_DEFAULT_BACKGROUND="240"
+POWERLEVEL9K_CONTEXT_DEFAULT_FOREGROUND="white"
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND="blue"
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND="white"
+POWERLEVEL9K_VCS_SVN_HOOKS=""
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+# Plugins
+plugins=(git screen golang azure volta docker fzf zoxide)
+
+# OS-specific plugins
+case `uname` in
+	Darwin)
+		plugins+=brew
+		;;
+	Linux)
+		case `lsb_release -i | cut -f 2` in
+			Ubuntu)
+				plugins+=ubuntu
+				;;
+			Debian)
+				plugins+=debian
+				;;
+			Fedora)
+				plugins+=dnf
+				;;
+			*)
+				;;
+		esac
+		;;
+	*)
+		;;
+esac
+
+# Must be loaded after brew
+plugins+=starship
+
+source $ZSH/oh-my-zsh.sh
+
+{{ if eq .chezmoi.os "darwin" -}}
+eval "$(/opt/homebrew/bin/brew shellenv)"
+{{ end -}}
+
+# Editor
+export EDITOR='nvim'
+
+# Aliases
+alias zshconfig="nvim ~/.zshrc"
+alias ohmyzsh="nvim ~/.oh-my-zsh"
+alias h='history'
+alias sdir="pwd > /tmp/zshrc_savedir"
+alias ldir="cd \`cat /tmp/zshrc_savedir\`"
+alias upgrade_oh_my_zsh="omz update"
+alias upgrade_p10k="git -C $ZSH_CUSTOM/themes/powerlevel10k pull"
+
+# Edit command line in $EDITOR
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '\C-e' edit-command-line
+
+# PATH additions
+export PATH="$HOME/.local/bin:$PATH"
+
+# Load local specific configuration if any.
+if [[ -a ~/.zshrc.local ]]; then
+    source ~/.zshrc.local
+fi

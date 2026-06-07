@@ -1,0 +1,19 @@
+#!/bin/bash
+{{ if eq .profile "work" -}}
+WORK_SOURCE="$HOME/.local/share/chezmoi-work"
+if [ -d "$WORK_SOURCE" ]; then
+  # Apply work dotfiles
+  [ -f "$WORK_SOURCE/dot_zshrc.local" ] && cp "$WORK_SOURCE/dot_zshrc.local" "$HOME/.zshrc.local"
+
+  if [ -f "$WORK_SOURCE/private_dot_ssh/config" ]; then
+    mkdir -p "$HOME/.ssh"
+    cp "$WORK_SOURCE/private_dot_ssh/config" "$HOME/.ssh/config"
+    chmod 600 "$HOME/.ssh/config"
+  fi
+
+  # Run work repo post-apply hooks
+  for script in "$WORK_SOURCE"/run_*.sh; do
+    [ -x "$script" ] && "$script"
+  done
+fi
+{{ end -}}
