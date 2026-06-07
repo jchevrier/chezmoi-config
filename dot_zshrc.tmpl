@@ -57,21 +57,16 @@ plugins+=starship
 
 source $ZSH/oh-my-zsh.sh
 
-{{ if eq .chezmoi.os "darwin" -}}
-eval "$(/opt/homebrew/bin/brew shellenv)"
-{{ end -}}
-
 # Editor
 export EDITOR='nvim'
 
 # Aliases
 alias zshconfig="nvim ~/.zshrc"
-alias ohmyzsh="nvim ~/.oh-my-zsh"
 alias h='history'
 alias sdir="pwd > /tmp/zshrc_savedir"
 alias ldir="cd \`cat /tmp/zshrc_savedir\`"
-alias upgrade_oh_my_zsh="omz update"
 alias upgrade_p10k="git -C $ZSH_CUSTOM/themes/powerlevel10k pull"
+alias v=nvim
 
 # Edit command line in $EDITOR
 autoload -U edit-command-line
